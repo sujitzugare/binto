@@ -59,6 +59,7 @@
             <button id="option1-button" onclick="switchToOption1()">Set Barcode Values</button>
             <button id="option3-button" onclick="switchToOption3()">UPI QR Code</button>
             <button id="option4-button" onclick="switchToOption4()">Import/Export Data</button>
+            <button id="option5-button" onclick="switchToOption5()">Bill History</button>
             <!-- Button to trigger dialog box -->
             <button id="openDialogBtn">Download File</button>
             <!-- Home Page Button -->
@@ -116,6 +117,11 @@
             <button id="download-data">Download Data</button>
             <input type="file" id="upload-data" accept=".json">
         </div>
+
+        <div id="option5" class="option hidden">
+            <h2>Bill History</h2>
+            <div id="bill-history"></div>
+        </div>
     </div>
 
     <!-- Dialog Box -->
@@ -169,13 +175,18 @@
             document.getElementById('option4').style.display = 'block';
         }
 
+        function switchToOption5() {
+            hideAllOptions();
+            document.getElementById('option5').style.display = 'block';
+        }
+
         function hideAllOptions() {
             document.getElementById('option1').style.display = 'none';
             document.getElementById('option2').style.display = 'none';
             document.getElementById('option3').style.display = 'none';
             document.getElementById('option4').style.display = 'none';
+            document.getElementById('option5').style.display = 'none';
         }
     </script>
 </body>
 </html>
-
