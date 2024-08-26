@@ -20,6 +20,7 @@ function switchToOption1() {
     document.getElementById('option2').style.display = 'none';
     document.getElementById('option3').style.display = 'none';
     document.getElementById('option4').style.display = 'none';
+    document.getElementById('option5').style.display = 'none';
 }
 
 function switchToOption2() {
@@ -27,6 +28,7 @@ function switchToOption2() {
     document.getElementById('option2').style.display = 'block';
     document.getElementById('option3').style.display = 'none';
     document.getElementById('option4').style.display = 'none';
+    document.getElementById('option5').style.display = 'none';
 }
 
 function switchToOption3() {
@@ -34,6 +36,7 @@ function switchToOption3() {
     document.getElementById('option2').style.display = 'none';
     document.getElementById('option3').style.display = 'block';
     document.getElementById('option4').style.display = 'none';
+    document.getElementById('option5').style.display = 'none';
 }
 
 function switchToOption4() {
@@ -41,12 +44,22 @@ function switchToOption4() {
     document.getElementById('option2').style.display = 'none';
     document.getElementById('option3').style.display = 'none';
     document.getElementById('option4').style.display = 'block';
+    document.getElementById('option5').style.display = 'none';
+}
+
+function switchToOption5() {
+    document.getElementById('option1').style.display = 'none';
+    document.getElementById('option2').style.display = 'none';
+    document.getElementById('option3').style.display = 'none';
+    document.getElementById('option4').style.display = 'none';
+    document.getElementById('option5').style.display = 'block';
 }
 
 domReady(function () {
     let productDetails = loadFromLocalStorage('productDetails') || {};
     let cart = [];
     let upiDetails = loadFromLocalStorage('upiDetails') || {};
+    let billHistory = loadFromLocalStorage('billHistory') || [];
 
     function onScanSuccessOption1(decodeText, decodeResult) {
         document.getElementById('barcode').value = decodeText;
@@ -155,7 +168,20 @@ domReady(function () {
         document.getElementById('bill-qr-code').innerHTML = "";
         qrCode.append(document.getElementById('bill-qr-code'));
 
+        // Save bill to history
+        const bill = {
+            date: new Date().toLocaleString(),
+            items: [...cart],
+            total: totalAmount
+        };
+        billHistory.push(bill);
+        saveToLocalStorage('billHistory', billHistory);
+
         alert('Total Bill: ₹' + totalAmount);
+
+        // Clear the cart after generating the bill
+        cart = [];
+        displayCart();
     });
 
     document.getElementById('qrForm').addEventListener('submit', function(e) {
@@ -202,6 +228,34 @@ domReady(function () {
                 alert('Data imported successfully.');
             };
             reader.readAsText(file);
+        }
+    });
+
+    // Display Bill History
+    document.getElementById('option5-button').addEventListener('click', () => {
+        const billHistoryContainer = document.getElementById('bill-history');
+        billHistoryContainer.innerHTML = '';
+
+        if (billHistory.length > 0) {
+            billHistory.forEach((bill, index) => {
+                let itemsList = '';
+                bill.items.forEach(item => {
+                    const product = productDetails[item.code];
+                    itemsList += `${product.name} (x${item.quantity}) - ₹${product.price * item.quantity}<br>`;
+                });
+
+                billHistoryContainer.innerHTML += `
+                    <div class="bill">
+                        <h3>Bill ${index + 1}</h3>
+                        <p><strong>Date/Time:</strong> ${bill.date}</p>
+                        <p><strong>Items:</strong><br>${itemsList}</p>
+                        <p><strong>Total:</strong> ₹${bill.total}</p>
+                        <hr>
+                    </div>
+                `;
+            });
+        } else {
+            billHistoryContainer.innerHTML = '<p>No bills found.</p>';
         }
     });
 
