@@ -26,6 +26,10 @@ body {
     gap: 10px;
 }
 
+element {
+  margin-top: 22px;
+}
+
 button {
     padding: 10px 20px;
     font-size: 16px;
