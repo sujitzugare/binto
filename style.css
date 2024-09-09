@@ -22,6 +22,10 @@ body {
 .element {
     margin-bottom: 22px; /* Apply margin-bottom to space out elements */
 }
+.input-group {
+    text-align: left; /* Align the input group elements to the left */
+    margin-bottom: 22px; /* Add spacing between input groups */
+}
 .button-group {
     display: flex;
     flex-direction: column;
