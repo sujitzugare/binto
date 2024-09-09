@@ -19,7 +19,9 @@ body {
     text-align: center;
     width: 100%;
 }
-
+.element {
+    margin-bottom: 22px; /* Apply margin-bottom to space out elements */
+}
 .button-group {
     display: flex;
     flex-direction: column;
