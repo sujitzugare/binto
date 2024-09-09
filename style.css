@@ -7,33 +7,32 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    
 }
 
 .container {
     max-width: 600px;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    text-align: center;
+    text-align: center; /* Center the content in the container */
     width: 100%;
 }
+
 .element {
     margin-bottom: 22px; /* Apply margin-bottom to space out elements */
 }
+
 .input-group {
     text-align: left; /* Align the input group elements to the left */
-    margin-bottom: 22px; /* Add spacing between input groups */
-}
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    margin-bottom: 10px; /* Add spacing between input groups */
 }
 
-element {
-  margin-top: 22px;
+input {
+    width: 100%; /* Make input fields take up full width */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 button {
@@ -52,39 +51,13 @@ button:hover {
     background-color: #0056b3;
 }
 
-.option {
-    margin-top: 20px;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    text-align: left;
-}
-
-label {
-    margin-bottom: 5px;
-}
-
-input {
-    width: 90%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-#cart div {
-    margin-top: 10px;
-}
-
 @media (max-width: 600px) {
     .container {
         padding: 20px;
     }
 
     input {
-        width: 95%;
+        width: 92%;
     }
 
     button {
@@ -92,15 +65,3 @@ input {
     }
 }
 
-/* New styles for import/export functionality */
-#option4 {
-    margin-top: 20px;
-}
-
-#upload-data {
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-/// this is css file
