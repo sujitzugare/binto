@@ -15,44 +15,19 @@ function loadFromLocalStorage(key) {
     return value ? JSON.parse(value) : null;
 }
 
-function switchToOption1() {
-    document.getElementById('option1').style.display = 'block';
-    document.getElementById('option2').style.display = 'none';
-    document.getElementById('option3').style.display = 'none';
-    document.getElementById('option4').style.display = 'none';
-    document.getElementById('option5').style.display = 'none';
+function showNotification(message, type = "info") {
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+    notification.innerText = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
 }
 
-function switchToOption2() {
-    document.getElementById('option1').style.display = 'none';
-    document.getElementById('option2').style.display = 'block';
-    document.getElementById('option3').style.display = 'none';
-    document.getElementById('option4').style.display = 'none';
-    document.getElementById('option5').style.display = 'none';
-}
-
-function switchToOption3() {
-    document.getElementById('option1').style.display = 'none';
-    document.getElementById('option2').style.display = 'none';
-    document.getElementById('option3').style.display = 'block';
-    document.getElementById('option4').style.display = 'none';
-    document.getElementById('option5').style.display = 'none';
-}
-
-function switchToOption4() {
-    document.getElementById('option1').style.display = 'none';
-    document.getElementById('option2').style.display = 'none';
-    document.getElementById('option3').style.display = 'none';
-    document.getElementById('option4').style.display = 'block';
-    document.getElementById('option5').style.display = 'none';
-}
-
-function switchToOption5() {
-    document.getElementById('option1').style.display = 'none';
-    document.getElementById('option2').style.display = 'none';
-    document.getElementById('option3').style.display = 'none';
-    document.getElementById('option4').style.display = 'none';
-    document.getElementById('option5').style.display = 'block';
+function switchToOption(optionId) {
+    const options = ["option1", "option2", "option3", "option4", "option5"];
+    options.forEach(id => {
+        document.getElementById(id).style.display = id === optionId ? "block" : "none";
+    });
 }
 
 domReady(function () {
@@ -85,7 +60,7 @@ domReady(function () {
 
             displayCart();
         } else {
-            alert("Unknown product: " + decodeText);
+            showNotification("Unknown product: " + decodeText, "error");
         }
     }
 
@@ -136,9 +111,9 @@ domReady(function () {
         if (barcode && productName && !isNaN(productPrice)) {
             productDetails[barcode] = { name: productName, price: productPrice };
             saveToLocalStorage('productDetails', productDetails);
-            alert('Product details saved.');
+            showNotification('Product details saved.', 'success');
         } else {
-            alert('Please fill in all fields.');
+            showNotification('Please fill in all fields.', 'error');
         }
     });
 
@@ -146,7 +121,7 @@ domReady(function () {
         const totalAmount = document.getElementById('total').innerText.split('₹')[1];
 
         if (!upiDetails.upiId || !upiDetails.name || !upiDetails.note) {
-            alert('Please set up your UPI details in the UPI QR Code section first.');
+            showNotification('Please set up your UPI details in the UPI QR Code section first.', 'error');
             return;
         }
 
@@ -168,7 +143,6 @@ domReady(function () {
         document.getElementById('bill-qr-code').innerHTML = "";
         qrCode.append(document.getElementById('bill-qr-code'));
 
-        // Save bill to history
         const bill = {
             date: new Date().toLocaleString(),
             items: [...cart],
@@ -177,11 +151,42 @@ domReady(function () {
         billHistory.push(bill);
         saveToLocalStorage('billHistory', billHistory);
 
-        alert('Total Bill: ₹' + totalAmount);
+        showNotification(`Total Bill: ₹${totalAmount}`, 'success');
 
-        // Clear the cart after generating the bill
         cart = [];
         displayCart();
+        document.getElementById('print-bill').disabled = false;
+    });
+
+    document.getElementById('print-bill').addEventListener('click', () => {
+        const totalAmount = document.getElementById('total').innerText.split('₹')[1];
+        const qrCodeImage = document.getElementById('bill-qr-code').innerHTML;
+
+        let itemsList = '';
+        cart.forEach(item => {
+            const product = productDetails[item.code];
+            itemsList += `
+                <p><strong>Item:</strong> ${product.name} (x${item.quantity}) - ₹${product.price * item.quantity}</p>
+            `;
+        });
+
+        const printContent = `
+            <div style="text-align:center; font-family:sans-serif;">
+                <h2>UPI Payment Details</h2>
+                <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
+                <p><strong>UPI ID:</strong> ${upiDetails.upiId}</p>
+                <p><strong>Name:</strong> ${upiDetails.name}</p>
+                <p><strong>Note:</strong> ${upiDetails.note}</p>
+                <h3>Items:</h3>
+                ${itemsList}
+                <div>${qrCodeImage}</div>
+            </div>
+        `;
+
+        const printWindow = window.open('', '', 'width=600,height=400');
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
     });
 
     document.getElementById('qrForm').addEventListener('submit', function(e) {
@@ -194,7 +199,7 @@ domReady(function () {
         upiDetails = { upiId, name, note };
         saveToLocalStorage('upiDetails', upiDetails);
 
-        alert('UPI details saved.');
+        showNotification('UPI details saved.', 'success');
     });
 
     document.getElementById('download-data').addEventListener('click', () => {
@@ -225,13 +230,12 @@ domReady(function () {
                 if (data.upiDetails) upiDetails = data.upiDetails;
                 saveToLocalStorage('productDetails', productDetails);
                 saveToLocalStorage('upiDetails', upiDetails);
-                alert('Data imported successfully.');
+                showNotification('Data imported successfully.', 'success');
             };
             reader.readAsText(file);
         }
     });
 
-    // Display Bill History
     document.getElementById('option5-button').addEventListener('click', () => {
         const billHistoryContainer = document.getElementById('bill-history');
         billHistoryContainer.innerHTML = '';
