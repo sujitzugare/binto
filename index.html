@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=678614abc1886b001ae16ed0&product=inline-share-buttons&source=platform" async="async"></script>
     <title>QR Code Scanner / Reader</title>
     <style>
         .dialog {
@@ -63,7 +67,7 @@
             <!-- Button to trigger dialog box -->
             <button id="openDialogBtn">Download File</button>
             <!-- Home Page Button -->
-            <button id="homePageBtn" onclick="window.location.href='https://qrwale.in/'">Home Page</button>
+            <button id="homePageBtn" onclick="window.location.href='index'">Home Page</button>
         </div>
 
         <div id="option1" class="option hidden">
@@ -89,7 +93,9 @@
             <div id="cart"></div>
             <div id="total">Total: ₹0</div>
             <button id="generate-bill">Generate Bill</button>
+            <button id="print-bill">Print Bill</button>
             <div id="bill-qr-code"></div>
+           
         </div>
 
         <div id="option3" class="option hidden">
@@ -122,6 +128,9 @@
             <h2>Bill History</h2>
             <div id="bill-history"></div>
         </div>
+         
+        <a href="user.php"><button type="button" class="btn">User Dashboard</button></a>
+        
     </div>
 
     <!-- Dialog Box -->
@@ -135,7 +144,7 @@
 
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/qr-code-styling.js"></script>
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
     <script>
         document.getElementById('openDialogBtn').onclick = function() {
             document.getElementById('dialogBox').style.display = 'block';
@@ -188,5 +197,6 @@
             document.getElementById('option5').style.display = 'none';
         }
     </script>
+    
 </body>
 </html>
